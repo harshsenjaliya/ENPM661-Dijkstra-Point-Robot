@@ -66,3 +66,70 @@ def move_vertex(move, x_coord, y_coord, cost):
         return move_upleft(x_coord, y_coord, cost)
     else:
         return None
+
+def create_shape_map(width, height):
+    shape_map = np.full((height, width), 0)
+    for y_coord in range(0, height):
+        for x_coord in range(0, width):
+            rect_1_1_temp = (x_coord + 5) - 100
+            rect_1_2_temp = (y_coord + 5) - 100
+            rect_1_3_temp = (x_coord - 5) - 175
+            rect__4_temp = (y_coord - 5) - 500
+
+            recta_2_1_temp = (x_coord + 5) - 275
+            recta_2_2_temp = (y_coord + 5) - 0
+            recta_2_3_temp = (x_coord - 5) - 350
+            recta_2_4_temp = (y_coord - 5) - 400
+
+            hexagon_size_6_temp = (y_coord + 5) +  0.58*(x_coord + 5) - 475.098
+            hexagon_size_5_temp = (y_coord + 5) - 0.58*(x_coord - 5) + 275.002
+            hexagon_size_4_temp = (x_coord - 6.5) - 779.9
+            hexagon_size_3_temp = (y_coord - 5) + 0.58*(x_coord - 5) - 775.002
+            hexagon_size_2_temp = (y_coord - 5) - 0.58*(x_coord + 5) - 24.92
+            hexagon_size_1_temp = (x_coord + 6.5) - 520.1
+
+            trap_a_temp = (x_coord + 5) - 900
+            trap_b_temp = (x_coord + 5) - 1020
+            trap_c_temp = (x_coord - 5) - 1100
+            trap_d_temp = (y_coord + 5) - 50
+            trap_e_temp = (y_coord - 5) - 125
+            trap_f_temp = (y_coord + 5) - 375
+            trap_g_temp = (y_coord - 5) - 450
+
+            if((trap_a_temp > 0 and trap_b_temp < 0 and trap_d_temp > 0 and trap_e_temp < 0) or (trap_b_temp > 0 and trap_c_temp < 0 and trap_d_temp > 0 and trap_g_temp < 0) or (trap_f_temp > 0 and trap_g_temp < 0 and trap_a_temp > 0 and trap_b_temp < 0) or (rect_1_1_temp > 0 and rect_1_2_temp > 0 and rect_1_3_temp < 0 and rect__4_temp < 0) or (recta_2_1_temp > 0 and recta_2_3_temp < 0 and recta_2_4_temp < 0 and recta_2_2_temp > 0) or (hexagon_size_6_temp > 0 and hexagon_size_5_temp > 0 and hexagon_size_4_temp < 0 and hexagon_size_3_temp < 0 and hexagon_size_2_temp < 0 and hexagon_size_1_temp > 0)):
+                shape_map[y_coord, x_coord] = 1
+
+            w1_temp = (y_coord) - 5
+            w2_temp = (y_coord) - 495
+            w3_temp = (x_coord) - 5
+            w4_temp = (x_coord) - 1195
+
+            rect_1_1 = (x_coord) - 100
+            rect_1_2 = (y_coord) - 100
+            rect_1_3 = (x_coord) - 175
+            rect__4 = (y_coord) - 500
+
+            recta_2_1 = (x_coord) - 275
+            recta_2_2 = (y_coord) - 0
+            recta_2_4 = (x_coord) - 350
+            recta_2_3 = (y_coord) - 400
+
+            hexagon_size_6 = (y_coord) +  0.58*(x_coord) - 475.098
+            hexagon_size_5 = (y_coord) - 0.58*(x_coord) + 275.002
+            hexagon_size_4 = (x_coord) - 779.9
+            hexagon_size_3 = (y_coord) + 0.58*(x_coord) - 775.002
+            hexagon_size_2 = (y_coord) - 0.58*(x_coord) - 24.92
+            hexagon_size_1 = (x_coord) - 520.1
+
+            trap_a = (x_coord) - 900
+            trap_b = (x_coord) - 1020
+            trap_c = (x_coord) - 1100
+            trap_d = (y_coord) - 50
+            trap_e = (y_coord) - 125
+            trap_f = (y_coord) - 375
+            trap_g = (y_coord) - 450
+
+            if((hexagon_size_6 > 0 and hexagon_size_5 > 0 and hexagon_size_4 < 0 and hexagon_size_3 < 0 and hexagon_size_2 < 0 and hexagon_size_1 > 0) or (rect_1_1 > 0 and rect_1_2 > 0 and rect_1_3 < 0 and rect__4 < 0 ) or (recta_2_1 > 0  and recta_2_3 < 0 and recta_2_4 < 0 and recta_2_2 > 0) or (trap_a > 0 and trap_b < 0 and trap_d > 0 and trap_e < 0) or (trap_b > 0 and trap_c < 0 and trap_d > 0 and trap_g < 0) or (trap_f > 0 and trap_g < 0 and trap_a > 0 and trap_b < 0) or (w1_temp < 0) or (w2_temp > 0) or (w3_temp < 0) or (w4_temp > 0)):
+                shape_map[y_coord, x_coord] = 2
+
+    return shape_map
