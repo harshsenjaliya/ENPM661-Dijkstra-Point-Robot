@@ -12,15 +12,15 @@ This Python script implements a path planning algorithm to find the shortest pat
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your_username/path-planning.git
+git clone https://github.com/harshsenaliya4433/ENPM661-Dijkstra-Point-Robot/tree/main
 ```
 2. Navigate to the project directory:
 ```bash
-cd path-planning
+cd ENPM661-Dijkstra-Point-Robot
 ```
 3. Run the script:
 ```bash
-python path_planning.py
+ENPM661-PROJECT-2.py
 ```
 ## Algorithm Overview
 
