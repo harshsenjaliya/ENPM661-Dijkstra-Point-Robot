@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 from queue import PriorityQueue
+from matplotlib.animation import FuncAnimation
 
 class Vertex:
     def __init__(self, x_coord, y_coord, cost, parent_vertex):
@@ -214,3 +215,103 @@ def backtrack_path(goal_vertex):
     x_path = [vertex.x_coord for vertex in backtrack_stack]
     y_path = [vertex.y_coord for vertex in backtrack_stack]
     return x_path, y_path
+
+
+class Plotter:
+    def __init__(self, start_vertex, goal_vertex, shape_map):
+        self.start_vertex = start_vertex
+        self.goal_vertex = goal_vertex
+        self.shape_map = shape_map
+
+        # Plot the Start and Goal Positions
+        plt.plot(start_vertex.x_coord, start_vertex.y_coord, "Db")
+        plt.plot(goal_vertex.x_coord, goal_vertex.y_coord, "Dg")
+
+        # Plot Map
+        plt.imshow(shape_map, cmap='binary')  # Set unexplored area to black
+        self.ax = plt.gca()
+        self.ax.invert_yaxis()
+        self.explored_vertices = []
+        self.explored_batch_size = 5000
+
+    def plot_explored_vertices(self, explored_vertices):
+        self.explored_vertices.extend(explored_vertices)
+        if len(self.explored_vertices) >= self.explored_batch_size:
+            self.plot_batch()
+
+    def plot_batch(self):
+        explored_array = np.array(self.explored_vertices)
+        x_coords, y_coords = explored_array[:, 0], explored_array[:, 1]
+        plt.plot(x_coords, y_coords, "mp")  # Set explored area to pink
+        self.explored_vertices = []
+
+    def plot_path(self, x_path, y_path):
+        plt.plot(x_path, y_path, "--b")  # Set obstacle color to blue
+        plt.show()
+        plt.close('all')
+
+    def animate_exploration_and_path(self, explored_vertices, x_path, y_path):
+        fig, ax = plt.subplots()
+
+        # Plot the exploration
+        ax.imshow(self.shape_map, cmap='binary')
+        explored_line, = ax.plot([], [], 'y3')  # Explored vertices line
+        path_line, = ax.plot([], [], 'b-')      # Path line
+
+        # Set up the axes properties
+        ax.set_xlim(0, self.shape_map.shape[1])
+        ax.set_ylim(0, self.shape_map.shape[0])
+
+        def update(frame):
+            # Update the data for explored vertices up to current frame
+            explored_line.set_data([node[0] for node in explored_vertices[:frame+1]],
+                                    [node[1] for node in explored_vertices[:frame+1]])
+
+            # Update the data for the path up to current frame
+            path_line.set_data(x_path[:frame+1], y_path[:frame+1])
+
+            return explored_line, path_line
+
+        # Create the animation
+        ani = FuncAnimation(fig, update, frames=len(x_path), interval=2, blit=True)
+
+        plt.show()
+
+if __name__ == '__main__':
+    width = 1200
+    height = 500
+    shape_map = create_shape_map(width, height)
+    start_x = int(input("Enter Start X: "))
+    start_y = int(input("Enter Start Y: "))
+    goal_x = int(input("Enter Goal X: "))
+    goal_y = int(input("Enter Goal Y: "))
+    start_time = time.time()
+    if not is_valid_move(start_x, start_y, shape_map):
+        print("Enter Start vertex within the permitted Space")
+        exit(-1)
+    if not is_valid_move(goal_x, goal_y, shape_map):
+        print("Put goal vertex within the permitted Space")
+        exit(-1)
+
+    start_vertex = Vertex(start_x, start_y, 0.0, -1)
+    goal_vertex = Vertex(goal_x, goal_y, 0.0, -1)
+
+    explored_vertices, goal_status = find_shortest_path(start_vertex, goal_vertex, shape_map)
+    if goal_status == 1:
+        x_path, y_path = backtrack_path(goal_vertex)
+        plotter_explored = Plotter(start_vertex, goal_vertex, shape_map)
+        plotter_path = Plotter(start_vertex, goal_vertex, shape_map)
+
+        plotter_explored.plot_explored_vertices(explored_vertices)
+        plotter_path.plot_path(x_path, y_path)
+
+        if x_path and y_path:  # Check if paths are not empty
+            plotter_explored.animate_exploration_and_path(explored_vertices, x_path, y_path)
+            plotter_path.animate_exploration_and_path([], [], [])  # No need for explored vertices here
+
+        cost = goal_vertex.cost
+        print(f"Cost to goal: {cost:.2f}")
+    else:
+        print("Goal not be planned for points")
+    end_time = time.time()
+    print(f"Time to execute the program: {end_time - start_time}")
