@@ -133,3 +133,73 @@ def create_shape_map(width, height):
                 shape_map[y_coord, x_coord] = 2
 
     return shape_map
+
+
+def is_goal_reached(current, goal):
+    if (current.x_coord == goal.x_coord) and (current.y_coord == goal.y_coord):
+        return True
+    else:
+        return False
+
+def is_valid_move(x, y, shape_map):
+    size = shape_map.shape
+    if(x >= size[1] or x < 0 or y >= size[0] or y < 0) or (shape_map[y][x] == 1) or (shape_map[y][x] == 2):
+        return False
+    return True
+
+def generate_unique_id(vertex):
+    id = 3333*vertex.x_coord + 113*vertex.y_coord
+    return id
+
+def find_shortest_path(start, goal, shape_map):
+    if start.x_coord == goal.x_coord and start.y_coord == goal.y_coord:
+        return None, 1
+
+    goal_vertex = goal
+    start_vertex = start
+    unexplored_vertices = {}
+    all_vertices = []
+    explored_vertices = {}
+    open_queue = PriorityQueue()
+    possible_moves = ['Up', 'UpRight', 'Right', 'DownRight', 'Down', 'DownLeft', 'Left', 'UpLeft']
+
+    start_key = generate_unique_id(start_vertex)
+    unexplored_vertices[start_key] = start_vertex
+    open_queue.put((start_vertex.cost, start_vertex))
+
+    while not open_queue.empty():
+        current_vertex = open_queue.get()[1]
+        all_vertices.append([current_vertex.x_coord, current_vertex.y_coord])
+        current_id = generate_unique_id(current_vertex)
+
+        if current_vertex.x_coord == goal_vertex.x_coord and current_vertex.y_coord == goal_vertex.y_coord:
+            goal_vertex.parent_vertex = current_vertex.parent_vertex
+            goal_vertex.cost = current_vertex.cost
+            print("Goal Vertex found")
+            return all_vertices, 1
+
+        if current_id in explored_vertices:
+            continue
+        else:
+            explored_vertices[current_id] = current_vertex
+
+        del unexplored_vertices[current_id]
+
+        for move in possible_moves:
+            x, y, cost = move_vertex(move, current_vertex.x_coord, current_vertex.y_coord, current_vertex.cost)
+            new_vertex = Vertex(x, y, cost, current_vertex)
+            new_vertex_id = generate_unique_id(new_vertex)
+
+            if not is_valid_move(new_vertex.x_coord, new_vertex.y_coord, shape_map) or new_vertex_id in explored_vertices:
+                continue
+
+            if new_vertex_id in unexplored_vertices:
+                if new_vertex.cost < unexplored_vertices[new_vertex_id].cost:
+                    unexplored_vertices[new_vertex_id].cost = new_vertex.cost
+                    unexplored_vertices[new_vertex_id].parent_vertex = new_vertex.parent_vertex
+            else:
+                unexplored_vertices[new_vertex_id] = new_vertex
+
+            open_queue.put((new_vertex.cost, new_vertex))
+
+    return all_vertices, 0
