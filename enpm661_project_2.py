@@ -203,3 +203,14 @@ def find_shortest_path(start, goal, shape_map):
             open_queue.put((new_vertex.cost, new_vertex))
 
     return all_vertices, 0
+
+def backtrack_path(goal_vertex):
+    backtrack_stack = []
+    backtrack_stack.append(goal_vertex)
+    while backtrack_stack[-1].parent_vertex != -1:
+        parent = backtrack_stack[-1].parent_vertex
+        backtrack_stack.append(parent)
+    backtrack_stack.reverse()
+    x_path = [vertex.x_coord for vertex in backtrack_stack]
+    y_path = [vertex.y_coord for vertex in backtrack_stack]
+    return x_path, y_path
