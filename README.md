@@ -20,7 +20,7 @@ cd ENPM661-Dijkstra-Point-Robot
 ```
 3. Run the script:
 ```bash
-ENPM661-PROJECT-2.py
+enpm661_project_2.py
 ```
 ## Algorithm Overview
 
