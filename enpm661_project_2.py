@@ -250,7 +250,7 @@ class Plotter:
         plt.show()
         plt.close('all')
 
-    def animate_exploration_and_path(self, explored_vertices, x_path, y_path):
+    def explora_anime(self, explored_vertices, x_path, y_path):
         fig, ax = plt.subplots()
 
         # Plot the exploration
@@ -272,10 +272,11 @@ class Plotter:
 
             return explored_line, path_line
 
-        # Create the animation
-        ani = FuncAnimation(fig, update, frames=len(x_path), interval=2, blit=True)
+        # Create the animation with a faster interval (smaller value)
+        ani = FuncAnimation(fig, update, frames=len(x_path), interval=1, blit=True)  # Adjust the interval here
 
         plt.show()
+
 
 if __name__ == '__main__':
     width = 1200
@@ -306,8 +307,8 @@ if __name__ == '__main__':
         plotter_path.plot_path(x_path, y_path)
 
         if x_path and y_path:  # Check if paths are not empty
-            plotter_explored.animate_exploration_and_path(explored_vertices, x_path, y_path)
-            plotter_path.animate_exploration_and_path([], [], [])  # No need for explored vertices here
+            plotter_explored.explora_anime(explored_vertices, x_path, y_path)
+            plotter_path.explora_anime([], [], [])  # No need for explored vertices here
 
         cost = goal_vertex.cost
         print(f"Cost to goal: {cost:.2f}")
