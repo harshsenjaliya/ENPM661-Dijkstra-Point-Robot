@@ -47,3 +47,11 @@ The script will output the following:
 1. Visualization of the explored vertices and final path on the grid map.
 2.Cost of the shortest path.
 3. Execution time of the program.
+
+Here is a sample image showing the robot's path and the explored nodes:
+
+![A* Pathfinding Output](output.png)
+
+You can watch the full demo of the algorithm in action here:
+
+[![Watch the Video](https://img.youtube.com/vi/your_video_id/maxresdefault.jpg)](https://www.youtube.com/watch?v=your_video_id)
